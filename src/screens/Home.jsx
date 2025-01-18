@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   word: { 
     fontSize: 32,
     fontWeight: "600",
-    marginBottom: 8,
+    marginBottom: 16,
     color: "#000"
   },
   translation: { 
