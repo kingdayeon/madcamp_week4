@@ -131,7 +131,7 @@ const Home = () => {
 
   const handlePageChange = (event) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const page = Math.round(offsetX / CARD_TOTAL_WIDTH);
+    const page = Math.round(offsetX / SCREEN_WIDTH);  // CARD_TOTAL_WIDTH 대신 SCREEN_WIDTH 사용
     setCurrentPage(page);
   };
 
@@ -168,21 +168,26 @@ const Home = () => {
         </View>
 
         <View style={styles.contentContainer}>
-          <FlatList
-            data={wordData[selectedLanguage]}
-            renderItem={renderWordCard}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            style={styles.wordList}
-            contentContainerStyle={styles.wordListContainer}
-            onMomentumScrollEnd={handlePageChange}
-            snapToInterval={CARD_TOTAL_WIDTH}
-            decelerationRate={0.8}
-            snapToAlignment="center"
-            initialNumToRender={5}
-          />
+        <FlatList
+  data={wordData[selectedLanguage]}
+  renderItem={renderWordCard}
+  keyExtractor={(item, index) => index.toString()}
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  pagingEnabled
+  style={styles.wordList}
+  contentContainerStyle={styles.wordListContainer}
+  onMomentumScrollEnd={handlePageChange}
+  getItemLayout={(data, index) => ({
+    length: SCREEN_WIDTH,
+    offset: SCREEN_WIDTH * index,
+    index,
+  })}
+  snapToInterval={SCREEN_WIDTH}
+  decelerationRate="fast"
+  snapToAlignment="center"
+  initialNumToRender={5}
+/>
 
           <View style={styles.pagination}>
             {wordData[selectedLanguage].map((_, index) => (
@@ -212,12 +217,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    position: 'relative',
+    // position: 'relative',
   },
   contentContainer: {
     position: 'relative',
-    zIndex: 2,
-    height:220
+    zIndex: 1,
+    height:220,
+    elevation: 1, // Android를 위해 추가
   },
   headerContainer: {
     flexDirection: 'row',
@@ -248,7 +254,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   wordListContainer: {
-    paddingHorizontal: (SCREEN_WIDTH - CARD_TOTAL_WIDTH) / 2,
+    // paddingHorizontal: (SCREEN_WIDTH - CARD_TOTAL_WIDTH) / 2,
   },
   wordCard: {
     width: CARD_WIDTH,
@@ -257,7 +263,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: CARD_MARGIN,
+    marginHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2, // 화면 중앙에 카드 위치
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -303,7 +309,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: Dimensions.get("window").width * 0.9,
     height: Dimensions.get("window").height * 0.5,
-    zIndex: -1,
+    zIndex: 0,  // -1에서 0으로 변경
+    elevation: 0, // Android를 위해 추가
   },
 });
 
