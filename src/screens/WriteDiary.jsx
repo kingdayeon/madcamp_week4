@@ -7,10 +7,13 @@ import {
   TouchableOpacity, 
   TextInput,
   Image,
-  SafeAreaView 
+  SafeAreaView,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { dummyData } from './Diary';
 
 const EmotionSelector = ({ selectedEmotion, onSelect }) => {
   const [showOptions, setShowOptions] = useState(false);
@@ -50,7 +53,7 @@ const EmotionSelector = ({ selectedEmotion, onSelect }) => {
   );
 };
 
-const WriteDiary = ({ route }) => {
+const WriteDiary = () => {
   const navigation = useNavigation();
   const [content, setContent] = useState('');
   const [emotion, setEmotion] = useState('happy');
@@ -62,63 +65,70 @@ const WriteDiary = ({ route }) => {
   const currentDay = days[currentDate.getDay()];
 
   const handleSend = () => {
-    // 여기에 일기 저장 로직 추가
+    // 새 일기 데이터 생성
+    const newDiary = {
+      id: Date.now().toString(),
+      date: `${currentDate.getMonth() + 1}월 ${currentDate.getDate()}일`,
+      day: currentDay,
+      content: content,
+      emotion: emotion,
+    };
+    dummyData.unshift(newDiary); // 여기에서 실제로는 글로벌 상태 관리나 API 호출을 통해 데이터를 저장할 것입니다
     navigation.goBack();
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="chevron-left" size={24} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleSend}>
-            <Icon name="send" size={24} color="#2088CA" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Date and Emotion */}
-        <View style={styles.dateEmotionContainer}>
-          <EmotionSelector
-            selectedEmotion={emotion}
-            onSelect={setEmotion}
-          />
-          <Text style={styles.date}>{formattedDate}</Text>
-          <Text style={styles.day}>{currentDay}</Text>
-        </View>
-
-        {/* Content Input */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.prompt}>오늘 하루를 작성해주세요!</Text>
-          <TextInput
-            style={styles.input}
-            multiline
-            value={content}
-            onChangeText={setContent}
-            placeholder="Write your day..."
-          />
-        </View>
-
-        {/* Correction Button */}
-        <TouchableOpacity 
-          style={styles.correctionButton}
-          onPress={() => setShowCorrection(!showCorrection)}
-        >
-          <Icon name="chevron-down" size={24} color="#2088CA" />
-        </TouchableOpacity>
-
-        {/* Correction Text */}
-        {showCorrection && (
-          <View style={styles.correctionContainer}>
-            <Text style={styles.correctionText}>
-              멋진 하루를 보내셨나내요. It was amazing이라고 문법적으로는 맞습니다.
-            </Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="chevron-left" size={24} color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSend}>
+              <Icon name="send" size={24} color="#2088CA" />
+            </TouchableOpacity>
           </View>
-        )}
-      </View>
-    </SafeAreaView>
+
+          <View style={styles.dateEmotionContainer}>
+            <EmotionSelector
+              selectedEmotion={emotion}
+              onSelect={setEmotion}
+            />
+            <Text style={styles.date}>{formattedDate}</Text>
+            <Text style={styles.day}>{currentDay}</Text>
+          </View>
+
+          <Text style={styles.prompt}>오늘 하루를 작성해주세요!</Text>
+          
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              multiline
+              value={content}
+              onChangeText={setContent}
+              placeholder="Write your day..."
+              placeholderTextColor="#999"
+            />
+          </View>
+
+          <TouchableOpacity 
+            style={styles.correctionButton}
+            onPress={() => setShowCorrection(!showCorrection)}
+          >
+            <Icon name="chevron-down" size={28} color="#2088CA" />
+          </TouchableOpacity>
+
+          {showCorrection && (
+            <View style={styles.correctionContainer}>
+              <Text style={styles.correctionText}>
+                멋진 하루를 보내셨네요. "It was amazing"이 문법적으로 맞습니다.
+              </Text>
+            </View>
+          )}
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -166,30 +176,35 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
   },
-  inputContainer: {
-    flex: 1,
-  },
   prompt: {
     fontSize: 16,
     color: '#000000',
     marginBottom: 16,
     textAlign: 'center',
   },
+  inputWrapper: {
+    height: 150,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 20,
+  },
   input: {
+    flex: 1,
     fontSize: 16,
     color: '#000000',
     textAlignVertical: 'top',
-    marginBottom: 20,
   },
   correctionButton: {
     alignItems: 'center',
     padding: 10,
+    marginBottom: 20,
   },
   correctionContainer: {
     backgroundColor: '#F5F5F5',
     padding: 16,
     borderRadius: 8,
-    marginTop: 10,
+    marginHorizontal: 20,
   },
   correctionText: {
     fontSize: 14,
