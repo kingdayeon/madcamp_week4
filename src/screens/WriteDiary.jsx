@@ -19,10 +19,10 @@ const EmotionSelector = ({ selectedEmotion, onSelect }) => {
   const [showOptions, setShowOptions] = useState(false);
   
   const emotions = [
-    { id: 'happy', source: require('../../assets/images/face_happy.png') },
-    { id: 'angry', source: require('../../assets/images/face_angry.png') },
-    { id: 'sad', source: require('../../assets/images/face_sad.png') },
-    { id: 'love', source: require('../../assets/images/face_love.png') },
+    { id: 'happy', source: require('../../assets/images/goose_happy.png') },
+    { id: 'angry', source: require('../../assets/images/goose_angry.png') },
+    { id: 'sad', source: require('../../assets/images/goose_sad.png') },
+    { id: 'love', source: require('../../assets/images/goose_love.png') },
   ];
 
   return (
@@ -135,7 +135,7 @@ const WriteDiary = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F2F2F2',
   },
   container: {
     flex: 1,
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   selectedEmotion: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
   },
   emotionOptions: {
     flexDirection: 'row',
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   emotionOption: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
   },
   date: {
     fontSize: 18,

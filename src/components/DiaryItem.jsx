@@ -4,10 +4,10 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 
 const DiaryItem = ({ date, day, content, emotion }) => {
   const emotionImages = {
-    happy: require('../../assets/images/face_happy.png'),
-    sad: require('../../assets/images/face_sad.png'),
-    angry: require('../../assets/images/face_angry.png'),
-    love: require('../../assets/images/face_love.png'),
+    happy: require('../../assets/images/goose_happy.png'),
+    sad: require('../../assets/images/goose_sad.png'),
+    angry: require('../../assets/images/goose_angry.png'),
+    love: require('../../assets/images/goose_love.png'),
   };
 
   return (
@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   emotionImage: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
     marginRight: 12,
   },
   contentContainer: {
