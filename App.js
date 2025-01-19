@@ -1,12 +1,14 @@
+import "react-native-gesture-handler"; // 최상단에 위치
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import * as Font from "expo-font"; // 폰트 로드
-import * as SplashScreen from "expo-splash-screen"; // SplashScreen 사용
+import { StyleSheet } from "react-native";
+import * as Font from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { setCustomText } from "react-native-global-props";
+import { NavigationContainer } from "@react-navigation/native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import BottomTabNavigation from "./src/navigation/BottomTabNavigation";
 
-// SplashScreen 초기화 유지
 SplashScreen.preventAutoHideAsync();
 
 const setGlobalFont = () => {
@@ -36,25 +38,23 @@ export default function App() {
         await loadFonts();
       } finally {
         setGlobalFont();
-        SplashScreen.hideAsync(); // 폰트 로드 후 SplashScreen 숨기기
+        SplashScreen.hideAsync();
       }
     };
-
     prepare();
   }, []);
 
   if (!fontsLoaded) {
-    return null; // 로딩 중에는 아무것도 렌더링하지 않음
+    return null;
   }
 
-  return <BottomTabNavigation />;
+  return (
+    <SafeAreaProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <BottomTabNavigation />
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
